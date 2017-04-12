@@ -57,9 +57,12 @@ word readValue (int FDC, int reg) {
 
 //Update actual values
 void updateMeasure() {
+  long measure;
   for (int i = 0; i < CHAN_NB; i++) {
     oldMeasure[i] = measure[i];
-    measure[i] = readChannel(i);
+    for (int i = 0; i < samplingRate; i++) {
+      measure[i] = (measure[i]*i + readChannel(i))/(i+1);
+    }
   }
 }
 
@@ -89,8 +92,8 @@ void updateLEDs() {
   color.G = 0;
   color.B = 0;
 
-  strip.SetPixelColor(0, color);
-  strip.SetPixelColor(1, color);
+  // strip.SetPixelColor(0, color);
+  // strip.SetPixelColor(1, color);
 
   // sensors slider
   long diff[CHAN_NB];
@@ -104,12 +107,24 @@ void updateLEDs() {
     if (diff[1] <= 0) { // not on 1 at all
       neoBRIGHT[0] = 255;
       neoBRIGHT[1] = 0;
+      strip.SetPixelColor(1,color);
+      color.R = 0;
+      color.G = 255;
+      color.B = 0;
+      strip.SetPixelColor(0, color);
     } else if (diff[0] <= 0) { // not on 0
       neoBRIGHT[0] = 0;
       neoBRIGHT[1] = 255;
+      strip.SetPixelColor(0,color);
+      color.R = 0;
+      color.G = 255;
+      color.B = 0;
+      strip.SetPixelColor(1, color);
     } else {
       for (int i = 0; i < CHAN_NB; i++) {
         neoBRIGHT[i] = diff[i]/sum; // x is sensor x
+        strip.SetPixelColor(0, color);
+        strip.SetPixelColor(1, color);
       }
     }
   }
@@ -178,7 +193,7 @@ void setup() {
 }
 
 void loop() {
-  updateMesure();
+  updateMeasure();
   updateSlider();
   strip.Show();
   delay(500);
