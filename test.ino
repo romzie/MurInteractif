@@ -128,6 +128,7 @@ void updateLEDs() {
       }
     }
   }
+  strip.Show();
 }
 
 void updateSlider() {
@@ -195,6 +196,6 @@ void setup() {
 void loop() {
   updateMeasure();
   updateSlider();
-  strip.Show();
+  //strip.Show();
   delay(500);
 }
