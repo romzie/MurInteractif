@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <NeoPixelBus.h>
 
-#define LED_NO 2
+#define LED_NO 14
 #define CHAN_NB 4
 
 const byte FDC = 0x2A; // FDC adress either Ox2A or 0X2B
@@ -57,7 +57,6 @@ word readValue (int FDC, int reg) {
 
 //Update actual values
 void updateMeasure() {
-  long measure;
   for (int i = 0; i < CHAN_NB; i++) {
     oldMeasure[i] = measure[i];
     for (int i = 0; i < samplingRate; i++) {
@@ -92,8 +91,9 @@ void updateLEDs() {
   color.G = 0;
   color.B = 0;
 
-  // strip.SetPixelColor(0, color);
-  // strip.SetPixelColor(1, color);
+  strip.SetPixelColor(0, color);
+  strip.SetPixelColor(1, color);
+  strip.ClearTo(color,1,3);
 
   // sensors slider
   long diff[CHAN_NB];
@@ -123,15 +123,21 @@ void updateLEDs() {
     } else {
       for (int i = 0; i < CHAN_NB; i++) {
         neoBRIGHT[i] = diff[i]/sum; // x is sensor x
-        strip.SetPixelColor(0, color);
-        strip.SetPixelColor(1, color);
+        //strip.SetPixelColor(0, color);
+        //strip.SetPixelColor(1, color);
       }
     }
   }
 }
 
 void updateSlider() {
-  updateLEDs();
+  //updateLEDs();
+    RgbColor color;
+  color.R = 255;
+  color.G = 0;
+  color.B = 0;
+  strip.ClearTo(color,1,3);
+  strip.Show();
 }
 
 //Configuring the FDC2214
@@ -166,10 +172,26 @@ void Configuration() {
 }
 
 void setup() {
+  Serial.begin(9600); //écran de debug
+
   strip.Begin();
+  RgbColor blue;
+  blue.R = 0;
+  blue.G = 0;
+  blue.B = 255;
+  RgbColor white;
+  white.R = 255;
+  white.G = 255;
+  white.B = 255;
+  RgbColor red;
+  red.R = 255;
+  red.G = 0;
+  red.B = 0;
+  strip.ClearTo(blue,1,4);
+  strip.ClearTo(white,5,9);
+  strip.ClearTo(red,10,13);
   strip.Show();
 
-  Serial.begin(9600); //écran de debug
 
   pinMode(A0,INPUT);
 	pinMode(LED_BUILTIN, OUTPUT); // initialize digital pin LED_BUILTIN as an output
@@ -190,11 +212,28 @@ void setup() {
 	Wire.begin();
 	Configuration();
   initializeReference();
+  delay(1000);
 }
 
 void loop() {
   updateMeasure();
   updateSlider();
-  strip.Show();
-  delay(500);
+  /*RgbColor c;
+  c.R = 255;
+  c.B = 255;
+  c.G = 255;
+  strip.SetPixelColor(3, c);
+  RgbColor b;
+  b.R = 0;
+  b.B = 255;
+  b.G = 0;
+  strip.SetPixelColor(2, b);
+  RgbColor a;
+  a.R = 255;
+  a.B = 0;
+  a.G = 0;*/
+  //strip.SetPixelColor(4, a);
+  //strip.ClearTo(b,1,1);
+  //strip.Show();
+  delay(100);
 }
