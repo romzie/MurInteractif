@@ -93,7 +93,7 @@ void updateLEDs() {
 
   strip.SetPixelColor(0, color);
   strip.SetPixelColor(1, color);
-  strip.ClearTo(color,1,3);
+  //strip.ClearTo(color,1,3);
 
   // sensors slider
   long diff[CHAN_NB];
@@ -128,16 +128,19 @@ void updateLEDs() {
       }
     }
   }
+  strip.Show();
 }
 
 void updateSlider() {
-  //updateLEDs();
-    RgbColor color;
+  updateLEDs();
+  /*
+  RgbColor color;
   color.R = 255;
   color.G = 0;
   color.B = 0;
   strip.ClearTo(color,1,3);
   strip.Show();
+*/
 }
 
 //Configuring the FDC2214
