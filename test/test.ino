@@ -92,9 +92,11 @@ void updateLEDs() {
   color.B = 0;
 
   strip.SetPixelColor(0, color);
+  strip.Show();
   strip.SetPixelColor(1, color);
-  //strip.ClearTo(color,1,3);
-
+  strip.Show();
+  strip.ClearTo(color,2,3);
+  strip.Show();
   // sensors slider
   long diff[CHAN_NB];
   long sum = 0;
@@ -103,7 +105,7 @@ void updateLEDs() {
     diff[i] = measure[i] - refMeasure[i];
     sum = sum + diff[i];
   }
-  if (diff[0] > 0 || diff[1] > 0) { // presence detected
+  /*if (diff[0] > 0 || diff[1] > 0) { // presence detected
     if (diff[1] <= 0) { // not on 1 at all
       neoBRIGHT[0] = 255;
       neoBRIGHT[1] = 0;
@@ -127,8 +129,7 @@ void updateLEDs() {
         //strip.SetPixelColor(1, color);
       }
     }
-  }
-  strip.Show();
+  }*/
 }
 
 void updateSlider() {
@@ -219,8 +220,8 @@ void setup() {
 }
 
 void loop() {
-  updateMeasure();
-  updateSlider();
+  //updateMeasure();
+  //updateSlider();
   /*RgbColor c;
   c.R = 255;
   c.B = 255;
@@ -231,12 +232,13 @@ void loop() {
   b.B = 255;
   b.G = 0;
   strip.SetPixelColor(2, b);
+  */
   RgbColor a;
-  a.R = 255;
-  a.B = 0;
-  a.G = 0;*/
-  //strip.SetPixelColor(4, a);
-  //strip.ClearTo(b,1,1);
-  //strip.Show();
+  a.R = 0;
+  a.B = 255;
+  a.G = 0;
+  strip.SetPixelColor(0, a);
+  strip.ClearTo(a,5,5);
+  strip.Show();
   delay(100);
 }
