@@ -92,11 +92,11 @@ void updateLEDs() {
   color.B = 0;
 
   strip.SetPixelColor(0, color);
-  strip.Show();
+  //strip.Show();
   strip.SetPixelColor(1, color);
   strip.Show();
-  strip.ClearTo(color,2,3);
-  strip.Show();
+  //strip.ClearTo(color,2,3);
+  //strip.Show();
   // sensors slider
   long diff[CHAN_NB];
   long sum = 0;
@@ -105,8 +105,8 @@ void updateLEDs() {
     diff[i] = measure[i] - refMeasure[i];
     sum = sum + diff[i];
   }
-  /*if (diff[0] > 0 || diff[1] > 0) { // presence detected
-    if (diff[1] <= 0) { // not on 1 at all
+  if (diff[2] > 0 || diff[3] > 0) { // presence detected
+    if (diff[3] <= 0) { // not on 1 at all
       neoBRIGHT[0] = 255;
       neoBRIGHT[1] = 0;
       strip.SetPixelColor(1,color);
@@ -114,7 +114,8 @@ void updateLEDs() {
       color.G = 255;
       color.B = 0;
       strip.SetPixelColor(0, color);
-    } else if (diff[0] <= 0) { // not on 0
+      strip.Show();
+    } else if (diff[2] <= 0) { // not on 0
       neoBRIGHT[0] = 0;
       neoBRIGHT[1] = 255;
       strip.SetPixelColor(0,color);
@@ -122,6 +123,7 @@ void updateLEDs() {
       color.G = 255;
       color.B = 0;
       strip.SetPixelColor(1, color);
+      strip.Show();
     } else {
       for (int i = 0; i < CHAN_NB; i++) {
         neoBRIGHT[i] = diff[i]/sum; // x is sensor x
@@ -129,19 +131,20 @@ void updateLEDs() {
         //strip.SetPixelColor(1, color);
       }
     }
-  }*/
+  }
 }
 
 void updateSlider() {
   updateLEDs();
-  /*
+  
   RgbColor color;
   color.R = 255;
   color.G = 0;
   color.B = 0;
-  strip.ClearTo(color,1,3);
-  strip.Show();
-*/
+  //strip.ClearTo(color,1,3);
+  //strip.SetPixelColor(7, color);
+  //strip.Show();
+
 }
 
 //Configuring the FDC2214
@@ -220,8 +223,8 @@ void setup() {
 }
 
 void loop() {
-  //updateMeasure();
-  //updateSlider();
+  updateMeasure();
+  updateSlider();
   /*RgbColor c;
   c.R = 255;
   c.B = 255;
@@ -232,13 +235,13 @@ void loop() {
   b.B = 255;
   b.G = 0;
   strip.SetPixelColor(2, b);
-  */
   RgbColor a;
-  a.R = 0;
-  a.B = 255;
+  a.R = 255;
+  a.B = 0;
   a.G = 0;
-  strip.SetPixelColor(0, a);
-  strip.ClearTo(a,5,5);
-  strip.Show();
+  strip.SetPixelColor(4, a);
+  */
+  //strip.ClearTo(a,0,5);
+  //strip.Show();
   delay(100);
 }
